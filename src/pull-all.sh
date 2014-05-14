@@ -4,6 +4,8 @@
 #     PROGRAM       : pull-all.sh
 #     DESCRIPTION   : This script will perform a "git pull" operation on the master
 #                     branch for all local git repositories on a developer's machine.
+#                     It will also prune any deleted remote branches from the local 
+#                     repository.
 #
 #     CREATED BY    : Kevin Custer
 #     CREATION DATE : 02-APR-2014
@@ -31,11 +33,12 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
       CURRENT_BRANCH=$(git symbolic-ref HEAD | awk -F'/' '{print $3}')
 
       if [ "$CURRENT_BRANCH" != "master" ]; then
-            git checkout master;
+            git checkout master
       fi
 
-	git remote -v | grep fetch;
-	git pull;
+	git remote -v | grep fetch
+	git pull
+      git remote prune origin
 
       # Return to the previously checked out branch
       if [ "$CURRENT_BRANCH" != "master" ]; then
